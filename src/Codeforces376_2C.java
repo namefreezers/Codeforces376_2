@@ -10,11 +10,13 @@ public class Codeforces376_2C {
 		Map<Integer, List<Integer>> g;
 		int n;
 		int k;
+		boolean[] visited;
 
 		Graph(int n, int k) {
 			g = new HashMap<Integer, List<Integer>>();
 			this.n = n;
 			this.k = k;
+			visited = new boolean[n];
 		}
 
 		void addEdge(int i, int j) {
@@ -34,8 +36,10 @@ public class Codeforces376_2C {
 		}
 
 		List<Set<Integer>> getConnectedComponents() {
-			for (int) {
-
+			for (int i = 0; i< n; i++) {
+				if (!visited[i]){
+					
+				}
 			}
 			return null;
 		}
