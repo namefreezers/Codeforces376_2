@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -7,41 +9,58 @@ import java.util.Set;
 
 public class Codeforces376_2C {
 	static class Graph {
-		Map<Integer, List<Integer>> g;
+		Map<Integer, Set<Integer>> g;
 		int n;
 		int k;
 		boolean[] visited;
 
 		Graph(int n, int k) {
-			g = new HashMap<Integer, List<Integer>>();
+			g = new HashMap<Integer, Set<Integer>>();
 			this.n = n;
 			this.k = k;
 			visited = new boolean[n];
 		}
 
 		void addEdge(int i, int j) {
-			List<Integer> list = g.get(i);
-			if (list == null) {
-				list = new LinkedList<Integer>();
-				g.put(i, list);
+			Set<Integer> set = g.get(i);
+			if (set == null) {
+				set = new HashSet<Integer>();
+				g.put(i, set);
 			}
-			list.add(j);
+			set.add(j);
 
-			list = g.get(j);
-			if (list == null) {
-				list = new LinkedList<Integer>();
-				g.put(j, list);
+			set = g.get(j);
+			if (set == null) {
+				set = new HashSet<Integer>();
+				g.put(j, set);
 			}
-			list.add(i);
+			set.add(i);
 		}
 
 		List<Set<Integer>> getConnectedComponents() {
-			for (int i = 0; i< n; i++) {
+			List<Set<Integer>> resultSetList = new ArrayList<>();
+			for (Integer i: g.keySet()) {
+				LinkedList<Integer> list = new LinkedList<>();
 				if (!visited[i]){
-					
+					Set<Integer> resultSet = new HashSet<>();
+					list.addLast(i);
+					resultSet.add(i);
+					visited[i] = true;
+					while(list.size()>0){
+						int next = list.getFirst();		//BFS
+						Set<Integer> nextSet = g.get(next);
+						for(Integer j : nextSet){
+							if(!visited[j]){
+								list.addLast(j);
+								resultSet.add(j);
+								visited[j] = true;
+							}
+						}
+					}
+					resultSetList.add(resultSet);
 				}
 			}
-			return null;
+			return resultSetList;
 		}
 	}
 
@@ -52,9 +71,9 @@ public class Codeforces376_2C {
 		int m = Integer.parseInt(s[1]);
 		int k = Integer.parseInt(s[2]);
 		s = in.nextLine().split(" ");
-		int[] socks = new int[n];
-		for (int i = 0; i < socks.length; i++) {
-			socks[i] = Integer.parseInt(s[0]);
+		int[] colors = new int[n];
+		for (int i = 0; i < colors.length; i++) {
+			colors[i] = Integer.parseInt(s[0]);
 		}
 		Graph graph = new Graph(n, k);
 		for (int i = 0; i < m; i++) {
@@ -62,7 +81,8 @@ public class Codeforces376_2C {
 			graph.addEdge(Integer.parseInt(s[0]), Integer.parseInt(s[1]));
 		}
 		in.close();
-
+		List<Set<Integer>> connected = graph.getConnectedComponents();
+		for (Set set : connected)
 	}
 
 }
